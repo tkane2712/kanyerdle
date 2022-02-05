@@ -19,14 +19,13 @@ export const Key = ({
   onClick,
 }: Props) => {
   const classes = classnames(
-    'flex items-center justify-center rounded mx-0.5 text-xs font-bold cursor-pointer select-none dark:text-white',
+    'flex items-center justify-center rounded mx-0.5 text-xs font-bold cursor-pointer select-none',
     {
-      'bg-slate-200 dark:bg-slate-600 hover:bg-slate-300 active:bg-slate-400':
-        !status,
-      'bg-slate-400 text-white': status === 'absent',
+      'bg-slate-400 hover:bg-slate-300 active:bg-slate-400': !status,
+      'bg-slate-800 text-white': status === 'absent',
       'bg-blue-500 hover:bg-blue-600 active:bg-blue-700 text-white':
         status === 'correct',
-      'bg-orange-500 hover:bg-orange-600 active:bg-orange-700 dark:bg-orange-700 text-white':
+      'bg-orange-500 hover:bg-orange-600 active:bg-orange-700 text-white':
         status === 'present',
     }
   )

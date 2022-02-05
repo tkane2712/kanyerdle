@@ -12,7 +12,16 @@ export const Grid = ({ guesses, currentGuess }: Props) => {
     guesses.length < 5 ? Array.from(Array(5 - guesses.length)) : []
 
   return (
-    <div className="pb-6">
+    <div
+      className="pb-6"
+      style={{
+        display: 'flex',
+        flexFlow: 'column',
+        // flexShrink: '1',
+        // flexGrow: 1,
+        justifyContent: 'center',
+      }}
+    >
       {guesses.map((guess, i) => (
         <CompletedRow key={i} guess={guess} />
       ))}

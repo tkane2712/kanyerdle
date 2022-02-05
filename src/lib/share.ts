@@ -3,10 +3,22 @@ import { solutionIndex } from './words'
 import { GAME_TITLE } from '../constants/strings'
 
 export const shareStatus = (guesses: string[], lost: boolean) => {
-  navigator.clipboard.writeText(
+  let text =
     `${GAME_TITLE} ${solutionIndex} ${lost ? 'X' : guesses.length}/6\n\n` +
-      generateEmojiGrid(guesses)
-  )
+    generateEmojiGrid(guesses)
+  console.log('text', text)
+
+  if (navigator.share) {
+    navigator
+      .share({
+        title: text,
+        text: text,
+      })
+      .then(() => console.log('Successful share'))
+      .catch((error) => console.log('Error sharing', error))
+  } else {
+    navigator.clipboard.writeText(text)
+  }
 }
 
 export const generateEmojiGrid = (guesses: string[]) => {
@@ -15,14 +27,14 @@ export const generateEmojiGrid = (guesses: string[]) => {
       const status = getGuessStatuses(guess)
       return guess
         .split('')
-        .map((_, i) => {
+        .map((letter, i) => {
           switch (status[i]) {
             case 'correct':
-              return '🟦'
+              return '🟩'
             case 'present':
-              return '🟧'
+              return '🟨'
             default:
-              return '⬜'
+              return '⬛️'
           }
         })
         .join('')

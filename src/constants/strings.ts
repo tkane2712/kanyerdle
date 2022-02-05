@@ -1,12 +1,19 @@
-export const GAME_TITLE = 'GAME'
+export const GAME_TITLE = 'KANYERDLE'
 
-export const WIN_MESSAGES = ['Great Job!', 'Awesome', 'Well done!']
-export const GAME_COPIED_MESSAGE = 'Game copied to clipboard'
+export const WIN_MESSAGES = [
+  'All Day!',
+  'On Sight!',
+  'You ARE a God!',
+  'No Mistakes!',
+  'Gorgeous!',
+  'Cold!',
+]
+export const GAME_COPIED_MESSAGE = 'Stats copied to clipboard'
 export const ABOUT_GAME_MESSAGE = 'About this game'
-export const NOT_ENOUGH_LETTERS_MESSAGE = 'Not enough letters'
-export const WORD_NOT_FOUND_MESSAGE = 'Word not found'
+export const NOT_ENOUGH_LETTERS_MESSAGE = 'Lord You Need More Letters'
+export const WORD_NOT_FOUND_MESSAGE = "Never Heard 'Em Say that before!"
 export const CORRECT_WORD_MESSAGE = (solution: string) =>
-  `The word was ${solution}`
+  `I'm So Appalled - You Lose`
 export const ENTER_TEXT = 'Enter'
 export const DELETE_TEXT = 'Delete'
 export const STATISTICS_TITLE = 'Statistics'

@@ -1,7 +1,7 @@
 import {
   InformationCircleIcon,
   ChartBarIcon,
-  SunIcon,
+  // SunIcon,
 } from '@heroicons/react/outline'
 import { useState, useEffect } from 'react'
 import { Alert } from './components/alerts/Alert'
@@ -11,10 +11,10 @@ import { AboutModal } from './components/modals/AboutModal'
 import { InfoModal } from './components/modals/InfoModal'
 import { StatsModal } from './components/modals/StatsModal'
 import {
-  GAME_TITLE,
+  // GAME_TITLE,
   WIN_MESSAGES,
   GAME_COPIED_MESSAGE,
-  ABOUT_GAME_MESSAGE,
+  // ABOUT_GAME_MESSAGE,
   NOT_ENOUGH_LETTERS_MESSAGE,
   WORD_NOT_FOUND_MESSAGE,
   CORRECT_WORD_MESSAGE,
@@ -31,9 +31,9 @@ import './App.css'
 const ALERT_TIME_MS = 2000
 
 function App() {
-  const prefersDarkMode = window.matchMedia(
-    '(prefers-color-scheme: dark)'
-  ).matches
+  // const prefersDarkMode = window.matchMedia(
+  //   '(prefers-color-scheme: dark)'
+  // ).matches
 
   const [currentGuess, setCurrentGuess] = useState('')
   const [isGameWon, setIsGameWon] = useState(false)
@@ -43,46 +43,56 @@ function App() {
   const [isStatsModalOpen, setIsStatsModalOpen] = useState(false)
   const [isWordNotFoundAlertOpen, setIsWordNotFoundAlertOpen] = useState(false)
   const [isGameLost, setIsGameLost] = useState(false)
-  const [isDarkMode, setIsDarkMode] = useState(
-    localStorage.getItem('theme')
-      ? localStorage.getItem('theme') === 'dark'
-      : prefersDarkMode
-      ? true
-      : false
-  )
+  // const [isDarkMode, setIsDarkMode] = useState(
+  //   localStorage.getItem('theme')
+  //     ? localStorage.getItem('theme') === 'dark'
+  //     : prefersDarkMode
+  //     ? true
+  //     : false
+  // )
   const [successAlert, setSuccessAlert] = useState('')
   const [guesses, setGuesses] = useState<string[]>(() => {
     const loaded = loadGameStateFromLocalStorage()
-    if (loaded?.solution !== solution) {
+
+    if (loaded) {
+      var now = new Date()
+      var nowDate = new Date(
+        now.getFullYear(),
+        now.getMonth(),
+        now.getDate()
+      ).getTime()
+
+      var date = new Date(loaded.date)
+      var savedDate = new Date(
+        date.getFullYear(),
+        date.getMonth(),
+        date.getDate()
+      ).getTime()
+
+      if (nowDate !== savedDate) {
+        setIsInfoModalOpen(true)
+        return []
+      } else {
+        if (loaded.guesses.includes('KANYE')) {
+          setIsGameWon(true)
+        } else if (loaded.guesses.length === 6) {
+          setIsGameLost(true)
+        } else if (loaded.guesses.length === 0) {
+          setIsInfoModalOpen(true)
+        }
+        return loaded.guesses ?? []
+      }
+    } else {
+      setIsInfoModalOpen(true)
       return []
     }
-    const gameWasWon = loaded.guesses.includes(solution)
-    if (gameWasWon) {
-      setIsGameWon(true)
-    }
-    if (loaded.guesses.length === 6 && !gameWasWon) {
-      setIsGameLost(true)
-    }
-    return loaded.guesses
   })
 
   const [stats, setStats] = useState(() => loadStats())
 
   useEffect(() => {
-    if (isDarkMode) {
-      document.documentElement.classList.add('dark')
-    } else {
-      document.documentElement.classList.remove('dark')
-    }
-  }, [isDarkMode])
-
-  const handleDarkMode = (isDark: boolean) => {
-    setIsDarkMode(isDark)
-    localStorage.setItem('theme', isDark ? 'dark' : 'light')
-  }
-
-  useEffect(() => {
-    saveGameStateToLocalStorage({ guesses, solution })
+    let date = new Date()
+    saveGameStateToLocalStorage({ guesses, date })
   }, [guesses])
 
   useEffect(() => {
@@ -148,34 +158,45 @@ function App() {
     }
   }
 
+  window.onresize = reportWindowSize
+  window.onload = reportWindowSize
+
+  function reportWindowSize() {
+    var vh = window.innerHeight * 0.01
+    document.documentElement.style.setProperty('--vh', `${vh}px`)
+  }
+
+  // Then we set the value in the --vh custom property to the root of the document
+
   return (
-    <div className="py-8 max-w-7xl mx-auto sm:px-6 lg:px-8">
-      <div className="flex w-80 mx-auto items-center mb-8 mt-12">
-        <h1 className="text-xl grow font-bold dark:text-white">{GAME_TITLE}</h1>
-        <SunIcon
-          className="h-6 w-6 cursor-pointer dark:stroke-white"
-          onClick={() => handleDarkMode(!isDarkMode)}
-        />
+    <div className="module py-2">
+      <div className="flex w-screen px-2 items-center mb-6">
+        <img src="kanye-img1.png" alt="kanye" className="mx-2 h-6 w-6" />
+        <h1 className="text-xl grow ">""</h1>
         <InformationCircleIcon
-          className="h-6 w-6 cursor-pointer dark:stroke-white"
+          className="mx-2 h-6 w-6 cursor-pointer stroke-white"
           onClick={() => setIsInfoModalOpen(true)}
         />
         <ChartBarIcon
-          className="h-6 w-6 cursor-pointer dark:stroke-white"
+          className="mx-2 h-6 w-6 cursor-pointer stroke-white"
           onClick={() => setIsStatsModalOpen(true)}
         />
       </div>
+
       <Grid guesses={guesses} currentGuess={currentGuess} />
+
       <Keyboard
         onChar={onChar}
         onDelete={onDelete}
         onEnter={onEnter}
         guesses={guesses}
       />
+
       <InfoModal
         isOpen={isInfoModalOpen}
         handleClose={() => setIsInfoModalOpen(false)}
       />
+
       <StatsModal
         isOpen={isStatsModalOpen}
         handleClose={() => setIsStatsModalOpen(false)}
@@ -193,13 +214,13 @@ function App() {
         handleClose={() => setIsAboutModalOpen(false)}
       />
 
-      <button
+      {/* <button
         type="button"
         className="mx-auto mt-8 flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded text-indigo-700 bg-indigo-100 hover:bg-indigo-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 select-none"
         onClick={() => setIsAboutModalOpen(true)}
       >
         {ABOUT_GAME_MESSAGE}
-      </button>
+      </button> */}
 
       <Alert message={NOT_ENOUGH_LETTERS_MESSAGE} isOpen={isNotEnoughLetters} />
       <Alert

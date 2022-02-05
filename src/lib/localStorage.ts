@@ -2,7 +2,7 @@ const gameStateKey = 'gameState'
 
 type StoredGameState = {
   guesses: string[]
-  solution: string
+  date: Date
 }
 
 export const saveGameStateToLocalStorage = (gameState: StoredGameState) => {
@@ -10,11 +10,13 @@ export const saveGameStateToLocalStorage = (gameState: StoredGameState) => {
 }
 
 export const loadGameStateFromLocalStorage = () => {
+  // localStorage.clear() //clears everything in localStorage
   const state = localStorage.getItem(gameStateKey)
   return state ? (JSON.parse(state) as StoredGameState) : null
 }
 
 const gameStatKey = 'gameStats'
+// const infoReadKey = 'infoRead'
 
 export type GameStats = {
   winDistribution: number[]
