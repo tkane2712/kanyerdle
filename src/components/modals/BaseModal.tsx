@@ -72,10 +72,7 @@ export const BaseModal = ({ title, children, isOpen, handleClose }: Props) => {
                     )
                   }}
                 />
-                {/* <XCircleIcon
-                  className="h-6 w-6 cursor-pointer stroke-white"
-                  onClick={() => handleClose()}
-                /> */}
+                <button className="opacity-0 absolute bottom-0"></button>
               </div>
             </div>
           </Transition.Child>
